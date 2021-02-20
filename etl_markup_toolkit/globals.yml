@@ -1,0 +1,7 @@
+---
+diagnostic_mode: false
+diagnostic_mode_show_count: true
+diagnostic_mode_show_columns: false
+diagnostic_mode_show_column_diff: true
+diagnostic_mode_show_preview: true
+diagnostic_mode_show_preview_rows_count: 50
