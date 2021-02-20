@@ -17,6 +17,15 @@ All actions support the following arguments:
 # I/O Actions
 I/O actions are concerned with reading and writing data.
 
-The support I/O Actions are (click through to read more)
+The supported I/O Actions are (click through to read more):
 1. [Read - Read data from a filesystem](io_actions.md#read)
 2. [Write - Write data using to a filesystem](io_actions.md#write)
+
+# Flow Actions
+Flow actions are concerned with control flow of the data
+
+The supported flow actions are (click through to read more):
+1. [Select - Select only certain fields](flow_actions.md#select)
+2. [Drop - Drop certain fields](flow_actions.md#drop)
+3. [Rename - Rename certain fields from one name to another](flow_actions.md#rename)
+4. [Join - Join the current workflow to another one](flow_actions.md#join)
