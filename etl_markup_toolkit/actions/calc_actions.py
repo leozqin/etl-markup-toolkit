@@ -1,6 +1,5 @@
 """module for actions that calculate a field using other fields"""
 
-from itertools import groupby
 import operator
 from .step import Step
 

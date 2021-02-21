@@ -24,8 +24,20 @@ The supported I/O Actions are (click through to read more):
 # Flow Actions
 Flow actions are concerned with control flow of the data
 
-The supported flow actions are (click through to read more):
+The supported Flow actions are (click through to read more):
 1. [Select - Select only certain fields](flow_actions.md#select)
 2. [Drop - Drop certain fields](flow_actions.md#drop)
 3. [Rename - Rename certain fields from one name to another](flow_actions.md#rename)
 4. [Join - Join the current workflow to another one](flow_actions.md#join)
+5. [Filter - Filter the rows in the workflow and optionally send them to another workflow](flow_actions.md#filter)
+6. [Do Nothing - takes no action](flow_actions.md#do-nothing)
+
+# Calculation Actions
+Calculation actions use one or more fields to calculate another value.
+
+The support Calculation actions are (click through to read more):
+1. [Comparison - Compare one or more fields and return a boolean outcome](calc_actions.md#comparison)
+2. [Aggregation - Group by one or more fields and take aggregations](calc_actions.md#aggregation)
+3. [Checksum - Calculate the checksum value for a field](calc_actions.md#checksum)
+4. [Scalar - Apply a scalar function to one or more columns](calc_actions.md#scalar)
+5. [Math - Do a mathematical operation on one or more operands](calc_actions.md#math)
