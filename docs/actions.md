@@ -1,6 +1,8 @@
 # Actions
 Actions are the most atomic unit of configuration within EMT. Each action corresponds to a native spark operation that is carried out upon execution of the ETL Process. All actions take arguments in the form of key-value pairs. Some arguments require/support complex types such as arrays and arrays of objects.
 
+[Click here to return to the README](../README.md)
+
 # Universal arguments
 All actions support the following arguments:
 
@@ -41,3 +43,15 @@ The support Calculation actions are (click through to read more):
 3. [Checksum - Calculate the checksum value for a field](calc_actions.md#checksum)
 4. [Scalar - Apply a scalar function to one or more columns](calc_actions.md#scalar)
 5. [Math - Do a mathematical operation on one or more operands](calc_actions.md#math)
+
+# Value Actions
+Value actions change the value of a field by applying formatting or replacing certain values with others.
+
+The supported Value actions are (click through to read more):
+1. [Replace Values - Replace values in one or more columns with another value](value_actions.md#replace-values)
+2. [Convert Values - converts columns from one datatype to another](value_actions.md#convert-values)
+3. [Standardize Values - standardizes value from one mapped value to another](value_actions.md#standardize-values)
+4. [Constant - adds a column with a constant value](value_actions.md#constant)
+5. [Concatenate - concatenates two or more columns, with or without a separator](value_actions.md#concatenate)
+6. [String Format - applies formatting to a string column](value_actions.md#string-format)
+7. [String Pad - pads a string until it is a certain length](value_actions.md#string-pad)

@@ -9,8 +9,6 @@ class ReplaceValues(Step):
     desc = "Replace values in one or more columns with another value"
     def do(self, workflow, etl_process):
 
-        from pyspark.sql.functions import regexp_replace, col
-
         self.old_value = self.action_details.get("replace")
         self.new_value = self.action_details.get("with")
 
