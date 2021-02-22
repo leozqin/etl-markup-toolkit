@@ -1,6 +1,8 @@
 """module for actions that modify values"""
 
 from typing import cast
+
+from pyspark.sql.functions import last
 from .step import Step
 
 class ReplaceValues(Step):
@@ -9,10 +11,19 @@ class ReplaceValues(Step):
     desc = "Replace values in one or more columns with another value"
     def do(self, workflow, etl_process):
 
+        from pyspark.sql.functions import regexp_replace, col
+
         self.old_value = self.action_details.get("replace")
         self.new_value = self.action_details.get("with")
+        self.is_regexp = self.action_details.get("is_regexp", False)
 
-        workflow.df = workflow.df.replace(self.old_value, self.new_value, subset = self.columns)
+        if self.is_regexp:
+            cols = self.columns or workflow.df.columns
+            for column in cols:
+                workflow.df = workflow.df \
+                    .withColumn(column, regexp_replace(col(column), self.old_value, self.new_value))
+        else:
+            workflow.df = workflow.df.replace(self.old_value, self.new_value, subset = self.columns)
     
     def log(self, workflow):
 
@@ -236,6 +247,46 @@ class StringPad(Step):
             "with": self.pad_char,
             "length": self.length,
             "columns": self.columns
+        }
+
+        self._make_log(workflow, log_stub)
+
+class ParseDate(Step):
+
+    name = "Parse Date"
+    desc = "Parse a date field"
+    def do(self, workflow, etl_process):
+
+        from pyspark.sql.functions import dayofmonth, dayofweek, dayofyear, last_day, next_day, month, weekofyear, year
+
+        self.new_field = self.action_details.pop("name")
+        self.type = self.action_details.pop("type")
+        self.target = self.action_details.pop("target")
+
+        func_map = {
+            "day": dayofmonth,
+            "day_of_week": dayofweek,
+            "day_of_year": dayofyear,
+            "last_day": last_day,
+            "next_day": next_day,
+            "month": month, 
+            "week_of_year": weekofyear,
+            "year": year
+        }
+
+        datefunc = func_map[self.type]
+
+        workflow.df = workflow.df \
+            .withColumn(self.new_field, datefunc(self.target))
+        
+    def log(self, workflow):
+
+        log_stub = {
+            "name": self.name,
+            "desc": self.desc,
+            "parsed_field": self.new_field,
+            "parse_type": self.type,
+            "target_field": self.target
         }
 
         self._make_log(workflow, log_stub)

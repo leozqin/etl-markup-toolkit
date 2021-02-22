@@ -55,3 +55,4 @@ The supported Value actions are (click through to read more):
 5. [Concatenate - concatenates two or more columns, with or without a separator](value_actions.md#concatenate)
 6. [String Format - applies formatting to a string column](value_actions.md#string-format)
 7. [String Pad - pads a string until it is a certain length](value_actions.md#string-pad)
+8. [Parse Date - extracts date parts or metadata from date fields](value_actions.md#parse-date)

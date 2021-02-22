@@ -66,58 +66,22 @@ To reference a param, set a key called `$param` within the top-level arguments t
 
 The params file should be structured as a set of keys, each of which contains arguments to the action that are inserted directly into the config at the location of the `$param` key.
 
-### Example: Replacement by Key
-For example, take the following action within a workflow:
-```yaml
-- action: do_something
-  $param: keys_to_action
-```
-If the params file passed during the creation of the ETL Process looks as below:
-```yaml
----
-keys_to_action:
-  some_argument: some value
-  some_other_argument:
-    - argument_value_0
-    - argument_value_1  
-```
-Then, after the param is replaced, the action will look like this:
-```yaml
-- action: do_something
-  some_argument: some value
-  some_other_argument:
-    - argument_value_0
-    - argument_value_1  
-```
-### Example: Replacement by Reference
-It is also supported to make a `$param` reference the location of another `yaml` document, which will be loaded and injected as the value for the key matching the `$param`.
+For some examples of how this works, [see errata](docs/errata.md#examples-of-variable-injection)
 
-For example, given the following action:
-```yaml
-- action: do_something
-  $param: keys_to_action
+For some suggestions of how variable injection can be used to improve the quality of ETL processes, [see errata](docs/errata.md#use-cases-for-references)
+
+# Logging
+ETL Processes have a `get_report` method that compiles a simple report for an ETL Process in the form of a Python dictionary, where the key is the workflow shortname and the value is the corresponding report for the workflow.
+
+Because this report is a Python object, the report is trivially serialized to whatever format is required. This is left to the user.
+
+Example:
+```python
+from json import dumps
+
+report = process.get_report()
+print(dumps(report))
 ```
-And the corresponding params file:
-```yaml
----
-keys_to_action:
-  $ref: "/path/to/referenced/file.yaml"
-```
-Where the referenced file contains:
-```yaml
----
-some_argument: some value
-  some_other_argument:
-    - argument_value_0
-    - argument_value_1  
-```
-The outcome of injection will be the same as before:
-```yaml
-- action: do_something
-  some_argument: some value
-  some_other_argument:
-    - argument_value_0
-    - argument_value_1  
-```
+
 # Errata
 [Click here to go to the errata](docs/errata.md)

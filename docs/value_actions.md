@@ -9,6 +9,7 @@ The `replace_values` step replaces values in one or more columns with another va
 Arguments:
 - `replace`: the value that should be replaced
 - `with`: the value with which instances of `replace` should be replaced
+- `is_regexp`: optional, default `false`: boolean value for whether `replace` should be treated as a regular expression
 - `columns`: optional: an array of the columns to which the replacement should be applied. If no `columns` argument exists then the replacement will be applied to every column.
 
 Example:
@@ -123,3 +124,20 @@ Example:
   columns:
     - zip_code
     - another_zip_code
+```
+
+## Parse Date
+The `parse_date` action extracts date parts or metadata from date fields.
+
+Arguments:
+- `name`: the name of the field where the extracted data should be placed
+- `target`: the field containing dates to parse
+- `type`: the type of parsing that should be executed, supported values are `day`, `day_of_week`, `day_of_year`, `last_day`, `next_day`, `month`, `week_of_year`, and `year`
+
+Example:
+```yaml
+- action: parse_date
+  name: day_of_my_birthday
+  type: day
+  target: my_birthday
+```
