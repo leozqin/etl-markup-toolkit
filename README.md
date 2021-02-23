@@ -83,5 +83,12 @@ report = process.get_report()
 print(dumps(report))
 ```
 
+For some ideas on how to use logging to improve data quality, [see errata](docs/errata.md#logging)
+
+# Contributions
+I welcome contributions - please do so by forking this repository and then sending a pull request.
+
+If you'd like to contribute but don't know where to start, I have compiled a [wishlist in the errata](docs/errata.md#contribution-wishlist)
+
 # Errata
 [Click here to go to the errata](docs/errata.md)
