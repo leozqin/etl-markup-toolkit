@@ -167,3 +167,54 @@ class Nothing(Step):
         }
 
         self._make_log(workflow, log_stub)
+
+class Union(Step):
+
+    name = "Union Workflows"
+    desc = "Union two or more workflows together"
+    def do(self, workflow, etl_process):
+
+        from pyspark.sql.functions import lit
+        from collections import OrderedDict
+
+        self.workflows = self.action_details.pop("workflows")
+
+        cols = list()
+        dfs = OrderedDict()
+        for wf in self.workflows:
+            # make sure all the workflows have been processed
+            if wf in etl_process.unprocessed_workflows:
+                etl_process._process_and_move_workflow(wf)
+            
+            # get the workflow that is being unioned
+            u_wf = etl_process.workflows[wf]
+
+            # add the columns to cols and the df to dfs
+            cols.extend(u_wf.df.columns)
+            dfs[wf] = u_wf.df
+        
+        all_cols = set(cols)
+        
+        # add null columns
+        for wf, df in dfs.items():
+            col_diff = all_cols - set(df.columns)
+            for col in col_diff:
+                dfs[wf] = dfs[wf].withColumn(col, lit(None))
+        
+        # union them together by name
+        _, new_df = dfs.popitem()
+
+        for df in dfs.values():
+            new_df = new_df.unionByName(df)
+        
+        workflow.df = new_df
+
+    def log(self, workflow):
+
+        log_stub = {
+            "name": self.name,
+            "desc": self.desc,
+            "workflows": self.workflows
+        }
+
+        self._make_log(workflow, log_stub)

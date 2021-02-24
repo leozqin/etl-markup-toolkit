@@ -1,7 +1,7 @@
 """Workflows module"""
 from typing import Dict
 from .actions.io_actions import Read, Write
-from .actions.flow_actions import Select, Drop, Rename, Join, Nothing, Filter
+from .actions.flow_actions import Select, Drop, Rename, Join, Nothing, Filter, Union
 from .actions.value_actions import ReplaceValues, StandardizeValues, Convert, Concat, Const, StringFormat, StringPad, ParseDate
 from .actions.calc_actions import Comparison, Aggregation, Checksum, Math, Scalar
 from os import path
@@ -32,7 +32,8 @@ class Workflow:
         "scalar": Scalar,
         "do_nothing": Nothing,
         "filter": Filter,
-        "parse_date": ParseDate
+        "parse_date": ParseDate,
+        "union": Union
     }
 
     def __init__(self, cfg: Dict, params: Dict = None) -> None:

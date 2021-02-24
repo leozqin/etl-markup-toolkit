@@ -51,7 +51,6 @@ class ETLProcess:
         Process a workflow and move it from the list of unprocessed workflows to the list 
         of processed ones.
         """
-        
         wf = self.unprocessed_workflows.pop(wf_name)
         wf.execute(self)
         self.workflows[wf_name] = wf

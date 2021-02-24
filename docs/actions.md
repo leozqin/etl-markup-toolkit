@@ -33,6 +33,7 @@ The supported Flow actions are (click through to read more):
 4. [Join - Join the current workflow to another one](flow_actions.md#join)
 5. [Filter - Filter the rows in the workflow and optionally send them to another workflow](flow_actions.md#filter)
 6. [Do Nothing - takes no action](flow_actions.md#do-nothing)
+7. [Union Workflows - unions two or more workflows together](flow_actions.md#union-workflows)
 
 # Calculation Actions
 Calculation actions use one or more fields to calculate another value.

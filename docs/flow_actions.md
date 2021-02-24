@@ -96,3 +96,17 @@ Example:
 - action: do_nothing
   comment: this step is more useful than you think!
 ```
+
+## Union Workflows
+The `union` step unions two or more workflows by column name. Columns are null-filled if they exist in one workflow but not the others. This action should only be used as the first action in a new workflow.
+
+Arguments:
+- `workflows`: an array containing the shortnames of workflows that should be unioned together
+
+Example:
+```yaml
+- action: union
+  workflows:
+    - a_workflow
+    - another_workflow
+```
