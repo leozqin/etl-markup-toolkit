@@ -98,7 +98,7 @@ Example:
 ```
 
 ## Union Workflows
-The `union` step unions two or more workflows by column name. Columns are null-filled if they exist in one workflow but not the others. This action should only be used as the first action in a new workflow.
+The `union` step unions two or more workflows by column name. Columns are null-filled if they exist in one workflow but not the others. This action should only be used as the first action in a new workflow. This action must be used after the workflows being unioned have been defined.
 
 Arguments:
 - `workflows`: an array containing the shortnames of workflows that should be unioned together
@@ -110,3 +110,18 @@ Example:
     - a_workflow
     - another_workflow
 ```
+
+## Copy Workflows
+The `copy_workflows` step copies an existing workflow into a new one. An example of when this might be useful is if you want to continue working with a workflow that has been unioned with another one. This action should only be used as the first action in a new workflow. This action must be used after the workflow being copied has been defined.
+
+Arguments:
+- `target`: the shortname of the workflow to copy
+- `cache_first`: optional, default False: if this argument is true then the workflow being copied will be cached before being copied.
+
+Example:
+```yaml
+- action: copy_workflow
+  cache_first: true
+  target: another_workflow
+```
+  

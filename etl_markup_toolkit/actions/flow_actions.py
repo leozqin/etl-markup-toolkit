@@ -218,3 +218,30 @@ class Union(Step):
         }
 
         self._make_log(workflow, log_stub)
+
+class Copy(Step):
+
+    name = "Copy Workflow"
+    desc = "Copy a workflow to another"
+    def do(self, workflow, etl_process):
+
+        self.target = self.action_details.pop("target")
+        self.cache_first = self.action_details.pop("cache_first", False)
+        
+        new_df = etl_process.workflows[self.target].df
+
+        if self.cache_first:
+            new_df = new_df.cache()
+
+        workflow.df = new_df
+
+    def log(self, workflow):
+
+        log_stub = {
+            "name": self.name,
+            "desc": self.desc,
+            "workflow": self.target,
+            "cache_first": self.cache_first
+        }
+
+        self._make_log(workflow, log_stub)
