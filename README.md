@@ -1,7 +1,7 @@
 # ETL Markup Toolkit
 ETL Markup Toolkit (EMT) is spark-native tool for doing ETL in a sustainable, reproducible, and low-code manner. The tool achieves by providing an abstraction of a spark workflow using configuration. Unlike traditional ETL tools, the configuration is done using `yaml`, and so is completely human-readable, compatible with source control, and easy to learn.
 
-Another advantage of the tool over traditional ETL tools, the tool translates configuration directly into `spark`/`pyspark` commands without the use of any UDFs, which can hurt performance. Finally, the tool and configuration is designed to be highly sub-scriptable.
+Another advantage of the tool over traditional ETL tools, the tool translates configuration directly into `spark`/`pyspark` commands without the use of any UDFs or custom serialization, which can hurt performance, and natively integrates with the `DataFrame` API. Finally, the tool and configuration is designed to be highly sub-scriptable.
 
 # How to Use
 ## Requirements
@@ -9,7 +9,15 @@ Another advantage of the tool over traditional ETL tools, the tool translates co
 2. Spark 2.4.4 or greater
 3. `pyyaml` 5.3 or greater
 ## Installation
-TBD!!
+Right now, EMT is not published on pypi, so the fastest way to install is to clone the repo and do a local install in a clean virtualenv. You can achieve this like so (some commands may differ depending on how your environment is configured)
+
+```bash
+git clone https://github.com/leozqin/etl-markup-toolkit.git
+python3 -m venv emt_env
+source emt_env/bin/activate
+cd etl-markup-toolkit
+make install
+```
 
 :warning: If your spark environment is configured with an isolated python environment (eg, Amazon EMR), do not run the default installation, which will overwrite the `spark-submit` executable. It is preferred to execute from source.
 

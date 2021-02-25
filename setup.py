@@ -4,11 +4,8 @@
 
 from setuptools import setup, find_packages
 
-with open('README.rst') as readme_file:
+with open('README.md') as readme_file:
     readme = readme_file.read()
-
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
 
 requirements = ["pyyaml >= 5.3", "pyspark"]
 
@@ -31,7 +28,7 @@ setup(
     description="A spark-native tool for doing ETL in a sustainable, reproducible, and low-code manner",
     install_requires=requirements,
     license="MIT license",
-    long_description=readme + '\n\n' + history,
+    long_description=readme,
     include_package_data=True,
     keywords='etl_markup_toolkit',
     name='etl_markup_toolkit',

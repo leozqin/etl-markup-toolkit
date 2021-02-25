@@ -72,3 +72,4 @@ tests/data/*
 tests/mappings/*
 tests/schemas/*
 tests/configs/*
+test_script.py
