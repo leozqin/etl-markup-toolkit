@@ -35,6 +35,9 @@ The supported Flow actions are (click through to read more):
 6. [Do Nothing - takes no action](flow_actions.md#do-nothing)
 7. [Union Workflows - unions two or more workflows together](flow_actions.md#union-workflows)
 8. [Copy Workflows - copy an existing workflow into a new one](flow_actions.md#copy-workflows)
+9. [Cache - persist the workflow using the specified storage level](flow_actions.md#cache)
+10. [Coalesce - reduce the number of partitions for the workflow](flow_actions.md#coalesce)
+11. [Repartition - shuffle the data by column(s) or into a number of partitions](flow_actions.md#repartition)
 
 # Calculation Actions
 Calculation actions use one or more fields to calculate another value.

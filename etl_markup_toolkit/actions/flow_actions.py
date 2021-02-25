@@ -1,5 +1,6 @@
 """module for control flow actions"""
 
+from pyspark import storagelevel
 from .step import Step
 
 class Select(Step):
@@ -242,6 +243,77 @@ class Copy(Step):
             "desc": self.desc,
             "workflow": self.target,
             "cache_first": self.cache_first
+        }
+
+        self._make_log(workflow, log_stub)
+
+class Cache(Step):
+
+    name = "Cache Workflow"
+    desc = "Cache the workflow to memory or disk"
+    def do(self, workflow, etl_process):
+
+        from pyspark import StorageLevel
+        
+        GLOBAL_DEFAULT_STORAGE_LEVEL = self.globals.get("cache_workflow_default_storage_level", "MEMORY_AND_DISK")
+        self.storage_level = self.action_details.pop("storage_level", GLOBAL_DEFAULT_STORAGE_LEVEL)
+
+        _storagelevel = getattr(StorageLevel, self.storage_level)
+
+        workflow.df = workflow.df.persist(_storagelevel)
+    
+    def log(self, workflow):
+
+        log_stub = {
+            "name": self.name,
+            "desc": self.desc,
+            "storage_level": self.storage_level
+        }
+
+        self._make_log(workflow, log_stub)
+
+class Coalesce(Step):
+
+    name = "Coalesce"
+    desc = "Coalesce the workflow into no more than n partitions"
+    def do(self, workflow, etl_process):
+
+        self.partitions = self.action_details.pop("partitions")
+
+        workflow.df = workflow.df.coalesce(self.partitions)
+    
+    def log(self, workflow):
+
+        log_stub = {
+            "name": self.name,
+            "desc": self.desc,
+            "partitions": self.partitions
+        }
+
+        self._make_log(workflow, log_stub)
+
+class Repartition(Step):
+
+    name = "Repartition"
+    desc = "Repartition by column(s) or into exactly n partitions"
+    def do(self, workflow, etl_process):
+
+        from pyspark.sql.functions import col
+
+        self.partitions = self.action_details.pop("partitions", None)
+        
+        if self.partitions:
+            workflow.df = workflow.df.repartition(self.partitions)
+        else:
+            workflow.df = workflow.df.repartition(*[col(i) for i in self.columns])
+    
+    def log(self, workflow):
+
+        log_stub = {
+            "name": self.name,
+            "desc": self.desc,
+            "partitions": self.partitions,
+            "columns": self.columns
         }
 
         self._make_log(workflow, log_stub)

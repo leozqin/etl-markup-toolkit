@@ -112,7 +112,7 @@ Example:
 ```
 
 ## Copy Workflows
-The `copy_workflows` step copies an existing workflow into a new one. An example of when this might be useful is if you want to continue working with a workflow that has been unioned with another one. This action should only be used as the first action in a new workflow. This action must be used after the workflow being copied has been defined.
+The `copy_workflows` action copies an existing workflow into a new one. An example of when this might be useful is if you want to continue working with a workflow that has been unioned with another one. This action should only be used as the first action in a new workflow. This action must be used after the workflow being copied has been defined.
 
 Arguments:
 - `target`: the shortname of the workflow to copy
@@ -124,4 +124,42 @@ Example:
   cache_first: true
   target: another_workflow
 ```
-  
+
+## Cache
+The `cache` option persists the workflow using the specified storage level. The storage level can be any supported by pyspark. This action does not do anything unless you do another computation downstream of it (in the same workflow) that results in a computation (such as a write action).
+
+Arguments:
+- `storage_level`: optional, the default value is the global parameter for `cache_workflow_default_storage_level`, if it set, else `MEMORY_AND_DISK`. The value for `storage_level` can be [any supported level within pyspark](https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.StorageLevel)
+
+Example:
+```yaml
+- action: cache
+  storage_level: MEMORY_ONLY_2
+```
+
+## Coalesce
+The `coalesce` action reduces the number of partitions in the workflow to no more than the specified number. For a discussion on the difference between coalesce and repartition, [see here](https://stackoverflow.com/questions/31610971/spark-repartition-vs-coalesce)
+
+Arguments:
+- `partitions`: the number of partitions to coalesce to. If this number is less than the current number of partitions, this may result in a no-op
+
+Example
+```yaml
+- action: coalesce
+  partitions: 100
+```
+
+## Repartition
+The `repartition` divides the workflow into partitions equal to the specified number, or by the values in the specified columns. For a discussion on the difference between coalesce and repartition, [see here](https://stackoverflow.com/questions/31610971/spark-repartition-vs-coalesce). This action can be useful if you want to ensure data locality for subsequent operations, or if it is required to increase the level of parallelism.
+
+Arguments:
+- `partitions`: the number of partitions to repartition to. If both this argument and `columns` are passed, this argument takes priority
+- `columns`: an array of the column(s) by which to repartition. 
+
+Example
+```yaml
+- action: repartition
+  columns:
+    - some_column
+    - another_column
+```

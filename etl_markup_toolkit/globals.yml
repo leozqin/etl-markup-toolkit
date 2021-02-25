@@ -5,3 +5,5 @@ diagnostic_mode_show_columns: false
 diagnostic_mode_show_column_diff: true
 diagnostic_mode_show_preview: true
 diagnostic_mode_show_preview_rows_count: 50
+
+cache_workflow_default_storage_level: MEMORY_AND_DISK
