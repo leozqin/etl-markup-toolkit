@@ -163,3 +163,17 @@ Example
     - some_column
     - another_column
 ```
+
+## Explode
+The `explode` action turns a single row into multiple rows, one for each value within an array field.
+
+Arguments:
+- `target`: the field that should be used for explosion. Should be an array field
+- `keep_nulls`: optional, default true: boolean value for whether rows having a null value for the `target` field should be retained
+
+Example
+```yaml
+- action: explode
+  target: array_of_things
+  keep_nulls: true
+```

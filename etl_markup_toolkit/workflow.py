@@ -1,8 +1,8 @@
 """Workflows module"""
 from typing import Dict
 from .actions.io_actions import Read, Write
-from .actions.flow_actions import Select, Drop, Rename, Join, Nothing, Filter, Union, Copy, Cache, Coalesce, Repartition
-from .actions.value_actions import ReplaceValues, StandardizeValues, Convert, Concat, Const, StringFormat, StringPad, ParseDate
+from .actions.flow_actions import Select, Drop, Rename, Join, Nothing, Filter, Union, Copy, Cache, Coalesce, Repartition, Explode
+from .actions.value_actions import ReplaceValues, StandardizeValues, Convert, Concat, Const, StringFormat, StringPad, ParseDate, Split
 from .actions.calc_actions import Comparison, Aggregation, Checksum, Math, Scalar
 from os import path
 from yaml import load, FullLoader
@@ -37,7 +37,9 @@ class Workflow:
         "copy_workflow": Copy,
         "cache": Cache,
         "coalesce": Coalesce,
-        "repartition": Repartition
+        "repartition": Repartition,
+        "split": Split,
+        "explode": Explode
     }
 
     def __init__(self, cfg: Dict, params: Dict = None) -> None:

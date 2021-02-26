@@ -317,3 +317,34 @@ class Repartition(Step):
         }
 
         self._make_log(workflow, log_stub)
+
+class Explode(Step):
+
+    name = "Explode"
+    desc = "Explode an array field into rows"
+    def do(self, workflow, etl_process):
+
+        from pyspark.sql.functions import explode_outer, explode, col
+
+        self.target = self.action_details.pop("target")
+        self.keep_nulls = self.action_details.pop("keep_nulls", True)
+
+        other_cols = [col(i) for i in workflow.df.columns if i != self.target]
+
+        if self.keep_nulls:
+            workflow.df = workflow.df \
+                .select(*other_cols, explode_outer(col(self.target)).alias(self.target))
+        else:
+            workflow.df = workflow.df \
+                .select(*other_cols, explode(col(self.target)).alias(self.target))
+
+    def log(self, workflow):
+
+        log_stub = {
+            "name": self.name,
+            "desc": self.desc,
+            "target_column": self.target,
+            "keep_nulls": self.keep_nulls
+        }
+
+        self._make_log(workflow, log_stub)

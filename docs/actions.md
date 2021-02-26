@@ -38,6 +38,7 @@ The supported Flow actions are (click through to read more):
 9. [Cache - persist the workflow using the specified storage level](flow_actions.md#cache)
 10. [Coalesce - reduce the number of partitions for the workflow](flow_actions.md#coalesce)
 11. [Repartition - shuffle the data by column(s) or into a number of partitions](flow_actions.md#repartition)
+12. [Explode - turns a single row into multiple rows based on an array field](flow_actions.md#explode)
 
 # Calculation Actions
 Calculation actions use one or more fields to calculate another value.
@@ -61,3 +62,4 @@ The supported Value actions are (click through to read more):
 6. [String Format - applies formatting to a string column](value_actions.md#string-format)
 7. [String Pad - pads a string until it is a certain length](value_actions.md#string-pad)
 8. [Parse Date - extracts date parts or metadata from date fields](value_actions.md#parse-date)
+9. [Split - convert a field into an array field using a delimiter](value_actions.md#split)

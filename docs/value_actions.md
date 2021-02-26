@@ -141,3 +141,17 @@ Example:
   type: day
   target: my_birthday
 ```
+
+## Split
+The `split` action converts a string field into an array based on a delimiter.
+
+Arguments:
+- `target`: the field that should be converted into an array
+- `split_on`: the delimiter that should be used to split the field into an array
+
+Example:
+```yaml
+- action: split
+  target: some_field
+  split_on: "-"
+```

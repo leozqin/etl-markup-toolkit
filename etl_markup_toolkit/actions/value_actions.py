@@ -1,6 +1,6 @@
 """module for actions that modify values"""
 
-from typing import cast
+from typing import AsyncIterable, cast
 
 from pyspark.sql.functions import last
 from .step import Step
@@ -287,6 +287,31 @@ class ParseDate(Step):
             "parsed_field": self.new_field,
             "parse_type": self.type,
             "target_field": self.target
+        }
+
+        self._make_log(workflow, log_stub)
+
+class Split(Step):
+
+    name = "Split"
+    desc = "Split a column into an array based on a delimiter"
+    def do(self, workflow, etl_process):
+
+        from pyspark.sql.functions import split, col
+
+        self.target = self.action_details.pop("target")
+        self.split_on = self.action_details.pop("split_on")
+
+        workflow.df = workflow.df \
+            .withColumn(self.target, split(col(self.target), self.split_on))
+    
+    def log(self, workflow):
+
+        log_stub = {
+            "name": self.name,
+            "desc": self.desc,
+            "target": self.target,
+            "split_on": self.split_on
         }
 
         self._make_log(workflow, log_stub)

@@ -25,6 +25,9 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
+    package_data = {
+        "": ["*.yml"]
+    },
     description="A spark-native tool for doing ETL in a sustainable, reproducible, and low-code manner",
     install_requires=requirements,
     license="MIT license",
