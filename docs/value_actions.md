@@ -155,3 +155,25 @@ Example:
   target: some_field
   split_on: "-"
 ```
+
+## Substring
+The `substring` action extracts a substring from a string field.
+
+Arguments:
+- `target`: the field from which the substring should be extracted
+- `name`: the name of the new field containing the substring
+- `type`: optional, default `simple`: the manner in which to extract the substring; support values are `simple`, `delim`, and `delim_index`. A `simple` substring extracts a substring using the position index and length. A `delim` index extracts a substring before a certain number (`index`) of occurrences of `delim`. A `delim_index` extracts the substring at the specified `index` after splitting the string using the `delim`.
+- `delim`: optional, required for `delim` and `delim_index` substrings; the delimiter that should be used for the purpose of that substring
+- `index`: optional, default `1`; only used for `delim` and `delim_index` substrings; the index that should be used for the purpose of that substring. 1-based index (not 0)
+- `pos`: optional, required only for `simple` substrings: the position at which to start the substring
+- `len`: optional, required only for `simple` substrings: the length of the substring to return
+
+Example:
+```yaml
+- action: substring
+  type: simple
+  name: substring_field
+  target: some_field
+  pos: 3
+  len: 5
+```

@@ -8,7 +8,7 @@ All actions support the following arguments:
 
 `comment`: A way of passing un-executed data from the configuration into the ETL Process. Typically, this can be a string with more details about why the action works in a certain way, but `yaml`-compliant complex types are also supported.
 
-`diagnostic_mode`: This is a boolean value that instructs EMT to emit additional logging during the processing of this action. The values are that emitted during diagnotic mode can be controlled by the global configs. By default, this is `false`
+`diagnostic_mode`: This is a boolean value that instructs EMT to emit additional logging during the processing of this action. The values are that emitted during diagnostic mode can be controlled by the global configs. By default, this is `false`
 
 ```yaml
 - action: do_nothing
@@ -63,3 +63,4 @@ The supported Value actions are (click through to read more):
 7. [String Pad - pads a string until it is a certain length](value_actions.md#string-pad)
 8. [Parse Date - extracts date parts or metadata from date fields](value_actions.md#parse-date)
 9. [Split - convert a field into an array field using a delimiter](value_actions.md#split)
+10. [Substring - extract a substring from a string field](value_actions.md#substring)

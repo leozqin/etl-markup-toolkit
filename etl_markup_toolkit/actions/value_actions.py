@@ -315,3 +315,55 @@ class Split(Step):
         }
 
         self._make_log(workflow, log_stub)
+
+class Substring(Step):
+
+    name = "Substring"
+    desc = "Extract a substring from a string field"
+
+    def do(self, workflow, etl_process):
+        
+        from pyspark.sql.functions import substring, substring_index, split, col
+
+        self.new_column = self.action_details.pop("name")
+        self.target = self.action_details.pop("target")
+
+        self.type = self.action_details.pop("type", "simple")
+        
+        if self.type == "simple":
+            self.pos = self.action_details.pop("pos", 1)
+            self.len = self.action_details.pop("len")
+            workflow.df = workflow.df \
+                .withColumn(self.new_column, substring(col(self.target), self.pos, self.len))
+        
+        else:
+            self.delim = self.action_details.pop("delim")
+            self.index = self.action_details.pop("index", 1)
+
+            if self.type == "delim": 
+                workflow.df = workflow.df \
+                    .withColumn(self.new_column, substring_index(col(self.target), self.delim, self.index))
+
+            elif self.type == "delim_index":
+                workflow.df = workflow.df \
+                    .withColumn(self.new_column, split(self.target, self.delim).getItem(self.index - 1))
+    
+    def log(self, workflow):
+
+        log_stub = {
+            "name": self.name,
+            "desc": self.desc,
+            "new_column": self.new_column,
+            "target": self.target,
+            "type": self.type
+        }
+
+        if self.type == "simple":
+            log_stub["pos"] = self.pos
+            log_stub["len"] = self.len
+
+        else:
+            log_stub["delim"] = self.delim
+            log_stub["index"] = self.index
+
+        self._make_log(workflow, log_stub)
