@@ -109,3 +109,24 @@ Arguments:
     - my_apples
     - your_apples
 ```
+
+## Window
+The `window` action does calculations over a configurable window.
+
+Arguments:
+- `name`: the name of the field containing the result of the window function
+- `type`: the type of the window function that should be calculated. Supported values are `sum`, `row_num`, `rank`, `dense_rank`, `cume_dist`, and `percent_rank`
+- `target`: optional, default `null`: the name of the column with which the same function should be applied. Only required for `sum` type.
+- `partition_by`: optional, default `[]` (partition over the entire workflow): an array of the columns that should be included within the partition expression
+- `order_by`: optional, default `[]` (no sorting applied): an array of key-value pairs corresponding to the way in which the partition should be sorted to apply the window function. May be required for certain function types.
+
+Example:
+```yaml
+- action: window
+  type: dense_rank
+  partition_by:
+    - some_column
+  order_by:
+    - some_other_column: asc
+    - yet_another_column: desc
+  name: dense_ranked_column

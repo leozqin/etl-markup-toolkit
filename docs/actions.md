@@ -49,6 +49,7 @@ The support Calculation actions are (click through to read more):
 3. [Checksum - Calculate the checksum value for a field](calc_actions.md#checksum)
 4. [Scalar - Apply a scalar function to one or more columns](calc_actions.md#scalar)
 5. [Math - Do a mathematical operation on one or more operands](calc_actions.md#math)
+6. [Window - Apply a window function over a window](calc_actions.md#window)
 
 # Value Actions
 Value actions change the value of a field by applying formatting or replacing certain values with others.

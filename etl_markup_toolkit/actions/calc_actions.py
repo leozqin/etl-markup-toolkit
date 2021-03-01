@@ -244,3 +244,59 @@ class Math(Step):
         }
 
         self._make_log(workflow, log_stub)
+
+class Window(Step):
+
+    name = "Window Function"
+    desc = "Calculate a window function over a specified window"
+    def do(self, workflow, etl_process):
+
+        from pyspark.sql.functions import sum, row_number, rank, dense_rank, cume_dist, percent_rank, col
+        from pyspark.sql import Window
+
+        self.window_column = self.action_details.pop("name")
+        self.type = self.action_details.pop("type")
+        self.partition_by = self.action_details.pop("partition_by", list())
+        self.order_by = self.action_details.pop("order_by", list())
+        self.target = self.action_details.pop("target", None)
+
+        type_map = {
+            "sum": lambda x: sum(x),
+            "row_num": lambda x: row_number(),
+            "rank": lambda x: rank(),
+            "dense_rank": lambda x: dense_rank(),
+            "cume_dist": lambda x: cume_dist(),
+            "percent_rank": lambda x: percent_rank()
+        }
+
+
+
+        order_map = {
+            "asc": lambda x: col(x).asc(),
+            "desc": lambda x: col(x).desc()
+        }
+
+        order_expr = list()
+        for order in self.order_by:
+            for k,v in order.items():
+                expr = order_map[v](k)
+                order_expr.append(expr)
+
+        w = Window().partitionBy(*self.partition_by).orderBy(*order_expr)
+        w_func = type_map[self.type](self.target).over(w)
+
+        workflow.df = workflow.df \
+            .withColumn(self.window_column, w_func)
+
+    def log(self, workflow):
+        
+        log_stub = {
+            "name": self.name,
+            "desc": self.desc,
+            "window_column": self.window_column,
+            "type": self.type,
+            "partition_by": self.partition_by,
+            "order_by": self.order_by
+        }
+
+        self._make_log(workflow, log_stub)
