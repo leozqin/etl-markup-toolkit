@@ -27,7 +27,7 @@ spark-submit quickstart.py <PATH_TO_CONFIG_FILE> <PATH_TO_PARAMS_FILE>
 ```
 
 ## Programatically
-At its core, the ETL Markup Toolkit describes an ETL Process. Appropriately, the container object for an ETL Process is an `ETLProcess`. To instantiate a process, pass it a relative or absolute path to a configuration file and a params file. The params file can be an empty document if no params are needed.
+At its core, the ETL Markup Toolkit describes an ETL Process. Appropriately, the container object for an ETL Process is an `ETLProcess`. To instantiate a process, pass it a relative or absolute path to a configuration file and a params file. The params file is an optional argument and does not need to be passed if no params are needed.
 
 After instantiating the object, call the `execute` method and execution of ETL Process will start.
 ```python

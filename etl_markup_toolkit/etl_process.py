@@ -30,6 +30,8 @@ class ETLProcess:
             with open(params_path) as fp:
                 self.params = load(fp, Loader = FullLoader)
                 self.params["_params_path"] = params_path
+        else:
+            self.params = dict()
         
         self.unprocessed_workflows = OrderedDict()
         self.workflows = OrderedDict()
