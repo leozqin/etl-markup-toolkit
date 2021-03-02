@@ -3,6 +3,8 @@ ETL Markup Toolkit (EMT) is spark-native tool for doing ETL in a sustainable, re
 
 Another advantage of the tool over traditional ETL tools, the tool translates configuration directly into `spark`/`pyspark` commands without the use of any UDFs or custom serialization, which can hurt performance, and natively integrates with the `DataFrame` API. Finally, the tool and configuration is designed to be highly sub-scriptable.
 
+To learn a little more about the philosophy behind EMT and use cases where it can excel, [please check out my blog.](https://www.leozqin.me/introducing-etl-markup-toolkit-emt/)
+
 # How to Use
 ## Requirements
 1. Python 3.7 or greater
