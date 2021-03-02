@@ -74,6 +74,8 @@ To reference a param, set a key called `$param` within the top-level arguments t
 
 The params file should be structured as a set of keys, each of which contains arguments to the action that are inserted directly into the config at the location of the `$param` key.
 
+To make a reference by location, do the same as above (creating a key called `$param`), but then set as the value of the key in turn a key called `$ref`, which references as its value the path to another `yml` file, which will be substituted in the place of that reference. The path can be absolute, or relative. If a relative path is used, it should be relative to the path of the params file.
+
 For some examples of how this works, [see errata](docs/errata.md#examples-of-variable-injection)
 
 For some suggestions of how variable injection can be used to improve the quality of ETL processes, [see errata](docs/errata.md#use-cases-for-references)
