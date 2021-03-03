@@ -1,9 +1,26 @@
 # ETL Markup Toolkit
-ETL Markup Toolkit (EMT) is spark-native tool for doing ETL in a sustainable, reproducible, and low-code manner. The tool achieves by providing an abstraction of a spark workflow using configuration. Unlike traditional ETL tools, the configuration is done using `yaml`, and so is completely human-readable, compatible with source control, and easy to learn.
+ETL Markup Toolkit (EMT) is spark-native tool for doing ETL transformations (the "T" in ETL) in a sustainable, reproducible, and low-code manner. The tool achieves by providing an abstraction of a spark workflow using configuration. Unlike traditional ETL tools, the configuration is done using `yaml`, and so is completely human-readable, compatible with source control, and easy to learn.
 
 Another advantage of the tool over traditional ETL tools, the tool translates configuration directly into `spark`/`pyspark` commands without the use of any UDFs or custom serialization, which can hurt performance, and natively integrates with the `DataFrame` API. Finally, the tool and configuration is designed to be highly sub-scriptable.
 
 To learn a little more about the philosophy behind EMT and use cases where it can excel, [please check out my blog.](https://www.leozqin.me/introducing-etl-markup-toolkit-emt/)
+
+# Terminology and Taxonomy
+
+The following is a glossary of terminology that is used within EMT. Hopefully, this section can serve as a reference for the rest of the documentation.
+
+1. ETL Process - an ETL Process is the container for all activities that are orchestrated by EMT. An ETL Process is described by a configuration file and (optionally) a param file.
+2. Configuration - a configuration describes the activities that the ETL Process should conduct. A configuration is composed of one or more workflows.
+3. Params - a supplement to the configuration that contains additional information. Individual actions within a workflow can be modified by the params file. 
+4. Workflow - a container for a view of data that is being processed by the ETL Process. A workflow is composed of one or more actions. Each workflow corresponds to a pyspark DataFrame and it is modified mutably by the actions contained within it.
+5. Action - an individual transformation that is applied to a Workflow by the ETL Process. Actions are referenced by their name and accepts arguments, which vary depending on the action that is being used. Actions are applied to the workflow in the order that they are defined within the workflow. There are over 30 actions supported by EMT.
+
+To use an object-oriented programming metaphor:
+1. You can think of the Configuration as the class that contains the business logic for the transformation. 
+2. The ETL Process executes an instance of the Configuration.
+3. The params are instance variables which can vary across different instances of the same Configuration.
+4. Workflows within a Configuration are methods of a class.
+5. Actions are function calls within a method.
 
 # How to Use
 ## Requirements
@@ -44,13 +61,14 @@ if __name__ == "__main__":
     process.execute()
 ```
 
-# Global Configuration Options
+# Configurations
+## Global
 A number of features can be controlled by changing the `globals.yml` file within `etl_markup_toolkit`. To learn more about these features, click [here](docs/global_configs.md)
 
-# Configuration Files: Workflows
+## Workflows
 A EMT configuration file is `yaml` document that describes a series of Workflows. Upon execution of the ETLProcess, workflows are executed in the order in which they are defined within the configuration file.
 
-Each workflow, in addition to the workflow itself, has a shortname, a proper name, and a description. Shortnames are used to refer to the workflow from within other workflows when necessary.
+Each workflow, in addition to the workflow itself, has a shortname, a proper name, and a description. Shortnames are used to refer to the workflow from within other workflows when necessary. Workflows are in turn comprised of actions, which describe transformations that should be applied to the data.
 
 To define a new workflow:
 
@@ -63,24 +81,36 @@ To define a new workflow:
     - action: nothing
       comment: Look ma, a workflow!
 ```
-# Configuration Files: Actions
-Within the `workflow` section of a workflow, the user should define actions. Actions have a name and accept arguments that tell it more about what to do.
+
 
 ## List of Actions
 To learn more about the actions that are supported, click [here](docs/actions.md)
 
-## Subscripting/Variable Injection
+# Variable Injection / Using References
 There are two methods by which an external reference can be made: by directly referencing a parameter in the params file, or by referencing a parameter, which in turn references a location in the filesystem.
 
-To reference a param, set a key called `$param` within the top-level arguments to the action, where the value corresponds to a key in the params file.
-
-The params file should be structured as a set of keys, each of which contains arguments to the action that are inserted directly into the config at the location of the `$param` key.
+## How to define references
+To reference a param, set a key called `$param` within the top-level arguments to the action, where the value corresponds to a key in the params file. The params file should be structured as a set of keys, each of which contains arguments to the action that are inserted directly into the config at the location of the `$param` key.
 
 To make a reference by location, do the same as above (creating a key called `$param`), but then set as the value of the key in turn a key called `$ref`, which references as its value the path to another `yml` file, which will be substituted in the place of that reference. The path can be absolute, or relative. If a relative path is used, it should be relative to the path of the params file.
 
 For some examples of how this works, [see errata](docs/errata.md#examples-of-variable-injection)
 
 For some suggestions of how variable injection can be used to improve the quality of ETL processes, [see errata](docs/errata.md#use-cases-for-references)
+
+## Use cases for references
+There are two kinds of references - references by key and references by location. Some use cases for both:
+
+References by key:
+- Changing the location from which data is read (for example, if a vendor gives you data on a monthly basis)
+- Changing the location where the data is written (for example, to write data to different locations between production and dev environments)
+- Changing fields that are written to the filesystem (for example, to write only ceratin fields and drop all others)
+
+References by location:
+- Storing the value mapping for standardizing a field  (for example, from vendor-provided values to standardized values)
+- Storing the schema required for reading a file (for example, to resude)
+
+It is encouraged to try generating parameter files programmatically! This might help you keep track of how business logic is applied during transformations. YAML is trivially serialized.
 
 # Logging
 ETL Processes have a `get_report` method that compiles a simple report for an ETL Process in the form of a Python dictionary, where the key is the workflow shortname and the value is the corresponding report for the workflow.
